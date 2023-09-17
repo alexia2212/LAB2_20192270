@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <shape xmlns:android="http://schemas.android.com/apk/res/android">
-        <solid android:color="@color/editTextBackground" />
-        <corners android:radius="8dp" /> <!-- Ajusta este valor para las esquinas redondeadas -->
-    </shape>
-</selector>

@@ -4,6 +4,106 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/material_dynamic_secondary10"
     tools:context=".Cronometro">
 
+    <Button
+        android:id="@+id/buttonIniciar"
+        android:layout_width="220dp"
+        android:layout_height="42dp"
+        android:text="Iniciar"
+        android:backgroundTint="@color/material_dynamic_primary30"
+        app:layout_constraintBottom_toBottomOf="@id/view"
+        app:layout_constraintEnd_toEndOf="@id/view"
+        app:layout_constraintStart_toStartOf="@id/view"
+        app:layout_constraintTop_toTopOf="@id/view"
+        app:layout_constraintVertical_bias="0.15" />
+
+    <Button
+        android:id="@+id/buttonPausar"
+        android:layout_width="220dp"
+        android:layout_height="42dp"
+        android:text="Pausar"
+        android:backgroundTint="@color/material_dynamic_primary40"
+        app:layout_constraintStart_toStartOf="@id/view"
+        app:layout_constraintEnd_toEndOf="@id/view"
+        app:layout_constraintTop_toTopOf="@id/view"
+        app:layout_constraintBottom_toBottomOf="@id/view"
+        app:layout_constraintVertical_bias="0.3" />
+
+    <Button
+        android:id="@+id/buttonDespausar"
+        android:layout_width="220dp"
+        android:layout_height="42dp"
+        android:text="Despausar"
+        android:backgroundTint="@color/material_dynamic_primary50"
+        app:layout_constraintStart_toStartOf="@id/view"
+        app:layout_constraintEnd_toEndOf="@id/view"
+        app:layout_constraintTop_toTopOf="@id/view"
+        app:layout_constraintBottom_toBottomOf="@id/view"
+        app:layout_constraintVertical_bias="0.45" />
+
+    <Button
+        android:id="@+id/buttonDetener"
+        android:layout_width="220dp"
+        android:layout_height="42dp"
+        android:text="Detener"
+        android:backgroundTint="@color/material_dynamic_primary60"
+        app:layout_constraintStart_toStartOf="@id/view"
+        app:layout_constraintEnd_toEndOf="@id/view"
+        app:layout_constraintTop_toTopOf="@id/view"
+        app:layout_constraintBottom_toBottomOf="@id/view"
+        app:layout_constraintVertical_bias="0.6" />
+
+    <Button
+        android:id="@+id/buttonLimpiar"
+        android:layout_width="220dp"
+        android:layout_height="42dp"
+        android:text="Limpiar"
+        android:backgroundTint="@color/material_dynamic_neutral40"
+        app:layout_constraintStart_toStartOf="@id/view"
+        app:layout_constraintEnd_toEndOf="@id/view"
+        app:layout_constraintTop_toTopOf="@id/view"
+        app:layout_constraintBottom_toBottomOf="@id/view"
+        app:layout_constraintVertical_bias="0.9" />
+
+    <TextView
+        android:id="@+id/textCronometro"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cronometro"
+        android:textColor="@color/white"
+        android:textSize="24dp"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="306dp"
+        android:layout_height="427dp"
+        android:alpha="0.8"
+        android:background="@drawable/rounded_background"
+        android:elevation="-10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.724" />
+
+    <TextView
+        android:id="@+id/textNumeroContando"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="00:00:00"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="38dp"
+        android:textColor="@color/white"
+        app:layout_constraintVertical_bias="0.189" />
 </androidx.constraintlayout.widget.ConstraintLayout>

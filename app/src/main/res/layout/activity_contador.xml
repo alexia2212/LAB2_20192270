@@ -4,6 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/material_dynamic_primary20"
     tools:context=".Contador">
+
+    <Button
+        android:id="@+id/buttonIniciarContador"
+        android:layout_width="157dp"
+        android:layout_height="50dp"
+        android:backgroundTint="@color/material_dynamic_primary60"
+        android:textColor="@color/black"
+        android:textSize="19dp"
+        android:text="INICIAR"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.524" />
+
+    <TextView
+        android:id="@+id/contadorVal"
+        android:layout_width="100dp"
+        android:textSize="34dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:layout_height="wrap_content"/>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
