@@ -1,37 +1,59 @@
 package com.example.lab2_20192270;
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.content.Context;
+import android.os.Vibrator;
+import android.util.Log;
 
-import android.os.Bundle;
-import android.view.View;
-
-import com.example.lab2_20192270.databinding.ActivityContadorBinding;
-
-public class Contador extends AppCompatActivity {
+import androidx.annotation.NonNull;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 
 
-    private ActivityContadorBinding binding;
-    int i = 1;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityContadorBinding.inflate(getLayoutInflater());
+public class Contador extends Worker {
 
-        setContentView(binding.getRoot());
-        binding.buttonIniciarContador.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                for(int i = 1; i<=10; i++){
-                    binding.contadorVal.setText(String.valueOf(i));
-                    try{
-                        Thread.sleep(1000);
-                    }catch (InterruptedException e){
-                        throw new RuntimeException(e);
-                    }
-                }
-
-            }
-        });
+    private int contador = 104;
+    private boolean aumentar = true;
+    public Contador(Context context, WorkerParameters parameters){
+        super(context, parameters);
     }
+    @NonNull
+    @Override
+    public Result doWork() {
+        if (aumentar) {
+            // Contar hacia arriba desde 104 hasta 226
+            while (contador <= 226) {
+                Log.d("msg-test", "contador: " + contador);
+                contador++;
+                try {
+                    Thread.sleep(10000); // Aumentar cada 10 segundos
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    return Result.failure();
+                }
+            }
+        } else {
+            // Contar hacia abajo desde 226 hasta 104
+            while (contador >= 104) {
+                Log.d("msg-test", "contador: " + contador);
+                contador--;
+                try {
+                    Thread.sleep(10000); // Disminuir cada 10 segundos
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    return Result.failure();
+                }
+            }
+        }
+
+        // Vibrar cuando termine la cuenta
+        if (contador == 227) {
+            Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+            if (vibrator != null) {
+                vibrator.vibrate(1000); // Vibración de 1 segundo
+            }
+        }
+
+        return Result.success();
+    }
+
 }
