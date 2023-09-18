@@ -1,59 +1,110 @@
 package com.example.lab2_20192270;
-
-import android.content.Context;
-import android.os.Vibrator;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
-import androidx.work.Worker;
-import androidx.work.WorkerParameters;
-
-
-public class Contador extends Worker {
-
-    private int contador = 104;
-    private boolean aumentar = true;
-    public Contador(Context context, WorkerParameters parameters){
-        super(context, parameters);
-    }
-    @NonNull
+import androidx.work.Data;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkInfo;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+import java.util.UUID;
+public class Contador extends AppCompatActivity {
+    private boolean start = true;
+    UUID uuid = UUID.randomUUID();
     @Override
-    public Result doWork() {
-        if (aumentar) {
-            // Contar hacia arriba desde 104 hasta 226
-            while (contador <= 226) {
-                Log.d("msg-test", "contador: " + contador);
-                contador++;
-                try {
-                    Thread.sleep(10000); // Aumentar cada 10 segundos
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    return Result.failure();
-                }
-            }
-        } else {
-            // Contar hacia abajo desde 226 hasta 104
-            while (contador >= 104) {
-                Log.d("msg-test", "contador: " + contador);
-                contador--;
-                try {
-                    Thread.sleep(10000); // Disminuir cada 10 segundos
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    return Result.failure();
-                }
-            }
-        }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_contador);
+        Toast.makeText(this, "Current Activity: " + getClass().getSimpleName(), Toast.LENGTH_SHORT).show();
 
-        // Vibrar cuando termine la cuenta
-        if (contador == 227) {
-            Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-            if (vibrator != null) {
-                vibrator.vibrate(1000); // Vibración de 1 segundo
-            }
-        }
+        Button button = findViewById(R.id.buttonIniciarContador);
+        TextView textView = findViewById(R.id.contadorVal);
 
-        return Result.success();
+        String numStr = textView.getText().toString();
+
+        int number = Integer.parseInt(numStr);
+        button.setOnClickListener(view -> {
+            if(start){
+                start=false;
+                Data dataBuilder = new Data.Builder()
+                        .putInt("number", number)
+                        .build();
+                WorkRequest workRequest = new OneTimeWorkRequest.Builder(ContWorker.class)
+                        .setId(uuid)
+                        .setInputData(dataBuilder)
+                        .build();
+                WorkManager.getInstance(Contador.this.getApplicationContext())
+                        .enqueue(workRequest);
+            }else{
+
+            }
+        });
+        WorkManager.getInstance(Contador.this.getApplicationContext())
+                .getWorkInfoByIdLiveData(uuid)
+                .observe(Contador.this, workInfo -> {
+                    if(workInfo != null){
+                        if(workInfo.getState() == WorkInfo.State.RUNNING){
+                            Data progress = workInfo.getProgress();
+                            int contador = progress.getInt("contador", 0);
+                            Log.d("msg-test", "progress: " + contador);
+                            textView.setText(String.format("%d", contador));
+                        } else if (workInfo.getState() == WorkInfo.State.SUCCEEDED) {
+                            Data outputData = workInfo.getOutputData();
+                            String texto = outputData.getString("info");
+                            assert texto != null;
+                            Log.d("msg-test", texto);
+                        }
+                    }else{
+                        Log.d("msg-test", "work info == null ");
+                    }
+                });
     }
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        TextView textView = findViewById(R.id.contadorVal);
+        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String uuidString = preferences.getString("uuid", null);
+        if (uuidString != null) {
+            UUID storedUUID = UUID.fromString(uuidString);
+            observe(textView,storedUUID);
+        }
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("uuid", uuid.toString()); // Store the UUID as a string
+        editor.apply();
+    }
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
+    private void observe(TextView textView, UUID uuid1){
+        WorkManager.getInstance(Contador.this.getApplicationContext())
+                .getWorkInfoByIdLiveData(uuid1)
+                .observe(Contador.this, workInfo -> {
+                    if(workInfo != null){
+                        if(workInfo.getState() == WorkInfo.State.RUNNING){
+                            Data progress = workInfo.getProgress();
+                            int contador = progress.getInt("contador", 0);
+                            Log.d("msg-test", "progress: " + contador);
+                            textView.setText(String.format("%d", contador));
+                        } else if (workInfo.getState() == WorkInfo.State.SUCCEEDED) {
+                            Data outputData = workInfo.getOutputData();
+                            String texto = outputData.getString("info");
+                            assert texto != null;
+                            Log.d("msg-test", texto);
+                        }
+                    }else{
+                        Log.d("msg-test", "work info == null ");
+                    }
+                });
+    }
 }
